@@ -1,0 +1,59 @@
+html,
+body
+{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html *
+{
+  box-sizing: border-box;
+}
+
+body
+{
+  background: url(http://hellodiem.com/wp-content/uploads/2017/04/O14A0464-e1493682727640.jpg) no-repeat right bottom / cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.keys
+{
+  display: flex;
+}
+
+.key
+{
+  border: 3px solid darkblue;
+  background: rgba(0, 0, 139, .3);
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  margin: 0 10px;
+  width: 100px;
+  transition: all 0.09s;
+}
+
+.active
+{
+  border-color: gold;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px gold;
+}
+
+kbd
+{
+  color: white;
+  font-size: 32px;
+  font-family: monospace;
+}
+
+span
+{
+  display: block;
+  font-size: 13px;
+  color: gold;
+}
