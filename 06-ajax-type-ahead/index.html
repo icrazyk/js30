@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div class="cities">
+    <form action="" class="cities__form form">
+      <input type="text" class="form__input" name="search">
+    </form>
+    
+    <ul class="cities__list list">
+      <li class="list__item">
+        <div class="list__title">
+          West Valley City, Utah
+        </div>
+        <div class="list__count">
+          133,579
+        </div>
+      </li>
+      <li class="list__item">
+        <div class="list__title">
+          Westminster, Colorado
+        </div>
+        <div class="list__count">
+          110,945
+        </div>
+      </li>
+      <li class="list__item">
+        <div class="list__title">
+          West Jordan, Utah
+        </div>
+        <div class="list__count">
+          110,077
+        </div>
+      </li>
+      <li class="list__item">
+        <div class="list__title">
+          West Covina, California
+        </div>
+        <div class="list__count">
+          107,740
+        </div>
+      </li>
+    </ul>
+  </div>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+  </style>
+
+  <script>
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  </script>
+</body>
+</html>
