@@ -9,10 +9,11 @@
 <body>
   <div class="cities">
     <form action="" class="cities__form form">
-      <input type="text" class="form__input" name="search">
+      <input type="text" class="form__input" name="search" id="search" placeholder="City or State">
     </form>
     
     <ul class="cities__list list">
+      
       <li class="list__item">
         <div class="list__title">
           West Valley City, Utah
@@ -45,21 +46,143 @@
           107,740
         </div>
       </li>
+      
     </ul>
   </div>
+
   <style>
     body {
       margin: 0;
       font-family: sans-serif;
+      background: orange;
+      display: flex;
+      padding-top: 30px;
+      justify-content: center;
     }
 
     * {
       box-sizing: border-box;
     }
+
+    .hl {
+      background: #e6ee9c;
+    }
+
+    .cities__form {
+      position:relative;
+      z-index: 2;
+    }
+
+    .form__input {
+      font-size: 30px;
+      text-align: center;
+      border: 5px solid gainsboro;
+      border-radius: 3px;
+      box-shadow: 0 0 5px grey, inset 0 0 3px grey;
+      width: 350px; 
+      padding: 15px;
+    }
+
+    .cities {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cities__list {
+      margin: 0;
+      padding: 0;
+      flex-shrink: 0;
+      width: 80%;
+      margin-top: -3px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .list__item {
+      padding: 17px 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid grey;
+      list-style: none;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      justify-content: space-between;
+    }
+
+    .list__title {
+      width: 70%;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .list__count {
+      width: 25%;
+      flex-shrink: 0;
+      font-size: 12px;
+    }
+
+    .list__item:nth-child(even) {
+      transform: perspective(100px) rotateX(3deg) translateY(2px) scale(1.001);
+      background: linear-gradient(to bottom, #c9c9c9 0%, #f9f9f9 100%);
+    }
+    
+    .list__item:nth-child(odd) {
+      transform: perspective(100px) rotateX(-3deg) translateY(3px);
+      background: linear-gradient(to bottom, #f9f9f9 0%, #c9c9c9 100%);
+    }
   </style>
 
   <script>
     const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    const cities = [];
+
+    fetch(endpoint)
+      .then((response) => response.json())
+      .then((data) => cities.push(...data))
+      .catch(alert);
+
+    function findMatches(wordToMatch, cities) {
+      return cities.filter((place) => {
+        const regex = new RegExp(wordToMatch, 'gi');
+        return place.city.match(regex) || place.state.match(regex);
+      });
+    }
+
+    function replacer(text) {
+      return `<span class='hl'>${text}</span>`;
+    }
+
+    function displayMatches() {
+      const matchArray = findMatches(this.value, cities);
+      
+      const html = matchArray.map(place => {
+
+        const regex = new RegExp(this.value, 'gi');
+        const city = place.city.replace(regex, replacer);
+        const state = place.state.replace(this.value, replacer);
+
+        const population = place.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+        return `
+          <li class="list__item">
+            <div class="list__title">
+              ${city}, ${state}
+            </div>
+            <div class="list__count">
+              ${population}
+            </div>
+          </li>`
+      }).join('');
+
+      list.innerHTML = html;
+    }
+
+    const search = document.querySelector('#search');
+    const list = document.querySelector('.cities__list');
+
+    search.addEventListener('change', displayMatches);
+    search.addEventListener('keyup', displayMatches);
   </script>
 </body>
 </html>
