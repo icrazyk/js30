@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hold shift to check multiple checkboxes</title>
+  <style>
+    body {
+      padding: 30px 0 0;
+      margin: 0;
+      font-family: 'Helvetica', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #BADA55;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+    }
+
+    li:not(:first-child) {
+      border-top: 1px solid #f1f1f1;
+    }
+
+    p {
+      margin: 0;
+      padding: 15px 15px;
+      border-left: 1px solid #cfcfff;
+    }
+    
+    input {
+      margin: 0px 15px;
+    }
+
+    input:checked + p {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <ul>
+    <li>
+      <input type="checkbox">
+      <p>Помыть посуду</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Погулять с ребенком</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Выучить английский</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Научиться программировать</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Купить машину с кондером</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Отправиться в кругосветку</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Летать на параплане</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Слетать в космос</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Стать бесмертным</p>
+    </li>
+    <li>
+      <input type="checkbox">
+      <p>Обрести душевный покой</p>
+    </li>
+  </ul>
+  <script>
+    const inputs = document.querySelectorAll('input');
+    let lastCheck;
+    let isBetween = false;
+
+    inputs.forEach(input => input.addEventListener('click', multiCheck));
+
+    function multiCheck(e) {
+
+      if(e.shiftKey && this.checked) {
+        inputs.forEach(input => {
+          if((input == this || input == lastCheck) && lastCheck) {
+            isBetween = !isBetween;
+          }
+
+          if(isBetween) {
+            input.checked = true;
+          }
+        });
+      }
+
+      if(this.checked) {
+        lastCheck = this;
+      } else {
+        lastCheck = undefined;
+      }
+    }
+  </script>
+</body>
+</html>
