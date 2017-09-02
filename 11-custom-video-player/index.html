@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom video plaer</title>
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(45deg, #F9CFF2 0%, #DAE0F2 100%) no-repeat;
+    }
+
+    .player {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      max-width: 640px;
+      background: black;
+    }
+
+    .player::before {
+      content: "";
+      display: block;
+      padding-top: 56.25%;
+    }
+
+    .player__video {
+      display: block;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .player__controls {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .progress {
+      width: 100%;
+      flex-shrink: 0;
+      display: flex;
+      background: #EEFFDD;
+    }
+
+    .progress__filled {
+      height: 10px;
+      background: #B9FF70;
+      flex-basis: 50%;
+    }
+
+    .player__button {
+      border: none;
+      background: transparent;
+      color: #9ED168;
+      padding: 10px 15px;
+    }
+    
+    .player__slider {
+      width: 30%;
+      -webkit-appearance: none;
+    }
+
+    .player__slider::-webkit-slider-runnable-track {
+      background: #EEFFDD;
+      height: 8px;
+    }
+
+    .player__slider::-webkit-slider-thumb {
+      background: #B9FF70;
+      -webkit-appearance: none;
+      height: 16px;
+      width: 10px;
+      margin-top: -4px;
+    }
+
+    
+
+/*    input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 12.3px 0;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 11.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: rgba(100, 127, 170, 0.86);
+  border-radius: 3.8px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 33px;
+  border-radius: 50px;
+  background: #915d9b;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -12.5px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: rgba(172, 187, 210, 0.86);
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 11.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: rgba(100, 127, 170, 0.86);
+  border-radius: 3.8px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 33px;
+  border-radius: 50px;
+  background: #915d9b;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 11.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: rgba(56, 74, 102, 0.86);
+  border: 0.2px solid #010101;
+  border-radius: 7.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background: rgba(100, 127, 170, 0.86);
+  border: 0.2px solid #010101;
+  border-radius: 7.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 33px;
+  border-radius: 50px;
+  background: #915d9b;
+  cursor: pointer;
+  height: 11.4px;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: rgba(100, 127, 170, 0.86);
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: rgba(172, 187, 210, 0.86);
+}
+*/
+  </style>
+</head>
+<body>
+  <div class="player">
+    <video class="player__video viewer" src="https://player.vimeo.com/external/194837908.sd.mp4?s=c350076905b78c67f74d7ee39fdb4fef01d12420&profile_id=164"></video>
+
+    <div class="player__controls">
+
+     <div class="progress">
+      <div class="progress__filled"></div>
+     </div>
+
+     <button class="player__button toggle" title="Toggle Play">►</button>
+     <input type="range" name="volume" class="player__slider" min="0" max="1" step="0.05" value="1">
+     <input type="range" name="playbackRate" class="player__slider" min="0.5" max="2" step="0.1" value="1">
+     <button data-skip="-10" class="player__button">« 10s</button>
+     <button data-skip="25" class="player__button">25s »</button>
+    </div>
+  </div>
+</body>
+</html>
