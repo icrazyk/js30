@@ -64,7 +64,7 @@
     .progress__filled {
       height: 10px;
       background: #B9FF70;
-      flex-basis: 50%;
+      flex-basis: 0%;
     }
 
     .player__button {
@@ -72,6 +72,8 @@
       background: transparent;
       color: #9ED168;
       padding: 10px 15px;
+      line-height: 1.5;
+      min-width: 50px;
     }
     
     .player__slider {
@@ -113,36 +115,55 @@
   <script>
     const viewer = document.querySelector('.viewer');
     const toggleButton = document.querySelector('.toggle');
+    const timeButtonList = document.querySelectorAll('button[data-skip]');
+    const rateList = document.querySelectorAll('.player__slider');
+    const progressFilled = document.querySelector('.progress__filled');
+    const progressBar = document.querySelector('.progress');
 
-    let isPlayed = false;
+    let isMouseDown = false;
 
     /* Handlers */
 
     viewer.addEventListener('click', handlePlay);
     viewer.addEventListener('play', handleToggle);
     viewer.addEventListener('pause', handleToggle);
+    viewer.addEventListener('timeupdate', progressUpdate);
     toggleButton.addEventListener('click', handlePlay);
+    timeButtonList.forEach(timeButton => timeButton.addEventListener('click', handleTimeSkip));
+    rateList.forEach(rate => rate.addEventListener('change', handleRate));
+    progressBar.addEventListener('click', handleProgress);
+    progressBar.addEventListener('mousemove', (e) => isMouseDown && handleProgress(e));
+    progressBar.addEventListener('mousedown', () => isMouseDown = true);
+    progressBar.addEventListener('mouseup', () => isMouseDown = false);
 
     /* Functions */
 
     function handlePlay() {
-      isPlayed = !isPlayed;
-      changePlay();
-    }
-
-    function changePlay() {
-      isPlayed ? viewer.play() : viewer.pause();
+      const method = viewer.paused ? 'play' : 'pause';
+      viewer[method]();
     }
 
     function handleToggle(e) {
-      let toggleContent = {
-        'pause' : '►',
-        'play' : '❚ ❚'
-      }
+      let icon = this.paused ? '►' : '❚ ❚';
+      toggleButton.textContent = icon;
+    }
 
-      toggleButton.textContent = toggleContent[e.type];
+    function handleTimeSkip() {
+      viewer.currentTime += parseFloat(this.dataset.skip);
+    }
 
-      console.log(e);
+    function handleRate() {
+      viewer[this.name] = this.value;
+    }
+
+    function progressUpdate(e) {
+      let percent = viewer.currentTime / viewer.duration * 100;
+      progressFilled.style.flexBasis = `${percent}%`;
+    }
+
+    function handleProgress(e) {
+      let currentTime = e.offsetX / progressBar.offsetWidth * viewer.duration;
+      viewer.currentTime = currentTime;
     }
 
   </script>
