@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Object and Arrays - Reference VS Copy</title>
+</head>
+<body>
+  <h1>Go console!</h1>
+  <script>
+    function gr(name, f) {
+      console.group(name);
+      f();
+      console.groupEnd(name);
+    }
+
+    gr('Copy simple types', () => {
+      gr('Copy numbers', ()=> {
+        let age = 50;
+        let ageCopy = age;
+        age = 100;
+        console.log(`age: ${age}, ageCopy: ${ageCopy}`);
+      });
+
+      gr('Copy string', () => {
+        let name = 'Dima';
+        let nameCopy = name;
+        name = 'Cool man';
+        console.log(`name: ${name}, nameCopy: ${nameCopy}`);
+      });
+
+      gr('Copy boolean', () => {
+        let one = true;
+        let oneCopy = one;
+        one = false;
+        console.log(`one: ${one}, oneCopy: ${oneCopy}`);
+      });
+    });
+
+    const planets = ['Mercury', 'Mercury', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
+
+    gr('Copy and Reference Array', () => {
+      gr('Reference Array', () => {
+        let planetsRef = planets;
+        planetsRef[1] = 'Venus';
+        console.log(`planets: ${planets}`);
+        console.log(`planetsRef: ${planetsRef}`);
+        console.log(planets == planetsRef);
+      });
+
+      gr('Copy Array (slice method)', () => {
+        let planetsCopy = planets.slice();
+        planetsCopy[3] = 'Earth';
+        console.log(`planets: ${planets}`);
+        console.log(`planetsCopy: ${planetsCopy}`);
+        console.log(planets == planetsCopy);
+      });
+
+      gr('Copy Array (concat method)', () => {
+        let planetsCopy = [].concat(planets);
+        planetsCopy[3] = 'Earth';
+        console.log(`planets: ${planets}`);
+        console.log(`planetsCopy: ${planetsCopy}`);
+        console.log(planets == planetsCopy);
+      });
+
+      gr('Copy Array (spread method)', () => {
+        let planetsCopy = [...planets];
+        planetsCopy[3] = 'Earth';
+        console.log(`planets: ${planets}`);
+        console.log(`planetsCopy: ${planetsCopy}`);
+        console.log(planets == planetsCopy);
+      });
+
+      gr('Copy Array (Array.from() method)', () => {
+        let planetsCopy = Array.from(planets);
+        planetsCopy[3] = 'Earth';
+        console.log(`planets: ${planets}`);
+        console.log(`planetsCopy: ${planetsCopy}`);
+        console.log(planets == planetsCopy);
+      });
+    });
+
+    const person = {
+      name: "Dmitry",
+      age: 27,
+      children: true  
+    }
+
+    gr('Copy and Reference Object', () => {
+      gr('Reference Object', () => {
+        let personRef = person;
+        personRef.work = 'Wallet One';
+        console.log(`person:`);
+        console.log(person);
+        console.log(`personRef:`);
+        console.log(personRef);
+        console.log(person == personRef);
+      });
+    });
+
+  </script>
+</body>
+</html>
