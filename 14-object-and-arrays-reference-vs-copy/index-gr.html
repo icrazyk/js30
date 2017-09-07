@@ -9,39 +9,60 @@
 <body>
   <h1>Go console!</h1>
   <script>
-    function gr(name, f) {
-      console.group(name);
-      f();
-      console.groupEnd(name);
+    function groper() {
+      let funcList = [];
+
+      let add = (name, f) => funcList.push({ name: name, f: f });
+
+      let render = () => {
+        funcList.forEach((obj, idx) => {
+          let method = idx < funcList.length - 1 ? 'groupCollapsed' : 'group';
+          console[method](obj.name);
+          obj.f()
+          console.groupEnd(obj.name);
+        });
+      };
+
+      return { add: add, render: render }
     }
 
-    gr('Copy simple types', () => {
-      gr('Copy numbers', ()=> {
+    let gr = new groper;
+
+    gr.add('Copy simple types', () => {
+
+      let gr = new groper;
+
+      gr.add('Copy numbers', ()=> {
         let age = 50;
         let ageCopy = age;
         age = 100;
         console.log(`age: ${age}, ageCopy: ${ageCopy}`);
       });
 
-      gr('Copy string', () => {
+      gr.add('Copy string', () => {
         let name = 'Dima';
         let nameCopy = name;
         name = 'Cool man';
         console.log(`name: ${name}, nameCopy: ${nameCopy}`);
       });
 
-      gr('Copy boolean', () => {
+      gr.add('Copy boolean', () => {
         let one = true;
         let oneCopy = one;
         one = false;
         console.log(`one: ${one}, oneCopy: ${oneCopy}`);
       });
+
+      gr.render();
     });
 
     const planets = ['Mercury', 'Mercury', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
 
-    gr('Copy and Reference Array', () => {
-      gr('Reference Array', () => {
+    gr.add('Copy and Reference Array', () => {
+
+      let gr = new groper;
+
+      gr.add('Reference Array', () => {
         let planetsRef = planets;
         planetsRef[1] = 'Venus';
         console.log(`planets: ${planets}`);
@@ -49,7 +70,7 @@
         console.log(planets == planetsRef);
       });
 
-      gr('Copy Array (slice method)', () => {
+      gr.add('Copy Array (slice method)', () => {
         let planetsCopy = planets.slice();
         planetsCopy[3] = 'Earth';
         console.log(`planets: ${planets}`);
@@ -57,7 +78,7 @@
         console.log(planets == planetsCopy);
       });
 
-      gr('Copy Array (concat method)', () => {
+      gr.add('Copy Array (concat method)', () => {
         let planetsCopy = [].concat(planets);
         planetsCopy[3] = 'Earth';
         console.log(`planets: ${planets}`);
@@ -65,7 +86,7 @@
         console.log(planets == planetsCopy);
       });
 
-      gr('Copy Array (spread method)', () => {
+      gr.add('Copy Array (spread method)', () => {
         let planetsCopy = [...planets];
         planetsCopy[3] = 'Earth';
         console.log(`planets: ${planets}`);
@@ -73,13 +94,15 @@
         console.log(planets == planetsCopy);
       });
 
-      gr('Copy Array (Array.from() method)', () => {
+      gr.add('Copy Array (Array.from() method)', () => {
         let planetsCopy = Array.from(planets);
         planetsCopy[3] = 'Earth';
         console.log(`planets: ${planets}`);
         console.log(`planetsCopy: ${planetsCopy}`);
         console.log(planets == planetsCopy);
       });
+
+      gr.render();
     });
 
     const person = {
@@ -92,8 +115,11 @@
       }
     }
 
-    gr('Copy and Reference Object', () => {
-      gr('Reference Object', () => {
+    gr.add('Copy and Reference Object', () => {
+
+      let gr = new groper;
+
+      gr.add('Reference Object', () => {
         let personRef = person;
         personRef.work = 'Wallet One';
         console.log(`person:`);
@@ -103,7 +129,7 @@
         console.log(person == personRef);
       });
 
-      gr('Copy Object', () => {
+      gr.add('Copy Object', () => {
         let personCopy = Object.assign({}, person, {work: 'Freelance', age: 28});
         // personCopy.work = 'Freelance';
         console.log(`person:`);
@@ -113,7 +139,7 @@
         console.log(person == personCopy);
       });
 
-      gr('Copy and Reference Object (not deep copy)', () => {
+      gr.add('Copy and Reference Object (not deep copy)', () => {
         // Think this a make copy?
         let personCopy = Object.assign({}, person, {work: 'Freelance', age: 28});
 
@@ -127,7 +153,7 @@
         console.log(person == personCopy);
       });
 
-      gr('Copy Object HACK (deep copy)', () => {
+      gr.add('Copy Object HACK (deep copy)', () => {
         let personCopy = JSON.parse(JSON.stringify(person));
         personCopy.name = 'Dimas';
         personCopy.social.twitter = '@godlavel';
@@ -138,7 +164,11 @@
         console.log(personCopy);
         console.log(person == personCopy);
       });
+
+      gr.render();
     });
+
+    gr.render();
 
   </script>
 </body>
