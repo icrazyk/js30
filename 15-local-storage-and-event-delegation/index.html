@@ -56,6 +56,7 @@
 
     .order__list li {
       padding: 10px 0;
+      display: flex;
     }
 
     .order__list li + li {
@@ -98,6 +99,7 @@
       color: #000;
       padding: 10px 15px;
       width: 35%;
+      cursor: pointer;
     }
 
     .order__add:hover {
@@ -107,6 +109,13 @@
     .order__tool {
       display: flex;
       justify-content: space-between;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, .6);
+    }
+
+    .order__del {
+      margin-left: auto; 
+      cursor: pointer;
     }
   </style>
 </head>
@@ -115,15 +124,75 @@
     <div class="logo">&#10052;</div>
     <form class="order">
       <ul class="order__list">
+        <!--
         <li><input type="checkbox" id="checkbox1"><label for="checkbox1">Панини</label></li>
         <li><input type="checkbox" id="checkbox2"><label for="checkbox2">Гамбургер</label></li>
         <li><input type="checkbox" id="checkbox3"><label for="checkbox3">Сок</label></li>
+        -->
       </ul>
       <div class="order__tool">
         <input type="text" class="order__field">
-        <button type="submit" class="order__add">Добавить</button>
+        <button type="submit" class="order__add">+ Добавить</button>
       </div>
     </form>
   </div>
+
+  <script>
+    const orderForm = document.querySelector('.order');
+    const orderList = document.querySelector('.order__list');
+    const orderField = document.querySelector('.order__field');
+    const dishList = JSON.parse(localStorage.getItem('dishList')) || [];
+
+    renderDishList(dishList);
+
+    orderForm.addEventListener('submit', formHandler);
+    orderList.addEventListener('click', updateItem);
+    orderList.addEventListener('click', removeItem);
+
+    function updateItem(e) {
+      const el = e.target;
+      if(!el.matches('input')) return;
+      
+      dishList[el.dataset.index].done = !dishList[el.dataset.index].done;
+      localStorage.setItem('dishList', JSON.stringify(dishList));
+    }
+
+    function removeItem(e) {
+      const el = e.target;
+      if(!el.matches('.order__del')) return;
+
+      dishList.splice(el.dataset.index, 1);
+      localStorage.setItem('dishList', JSON.stringify(dishList));
+      renderDishList(dishList);
+    }
+
+    function formHandler(e) {
+      e.preventDefault();
+
+      dishList.push({
+        name: orderField.value,
+        done: false
+      });
+
+      localStorage.setItem('dishList', JSON.stringify(dishList));
+      orderField.value = '';
+
+      renderDishList(dishList);
+    }
+
+    function renderDishList(dishList) {
+      const list = dishList.map((dish, index) => {
+        return `
+          <li>
+            <input type="checkbox" id="checkbox${index}" data-index=${index} ${dish.done ? 'checked' : ''}>
+            <label for="checkbox${index}">${dish.name}</label>
+            <span class="order__del" data-index=${index}>❌</span>
+          </li>
+        `;
+      }).join('');
+
+      orderList.innerHTML = list;
+    }
+  </script>
 </body>
 </html>
